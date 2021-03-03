@@ -401,7 +401,8 @@ function addXliffToSuggestionMap(languageCodes: string[], suggestionMaps: Map<st
         addMapToSuggestionMap(suggestionMaps, langCode, matchMap);
     }
 }
-function addMapToSuggestionMap(suggestionMaps: Map<string, Map<string, string[]>[]>, langCode: string, matchMap: Map<string, string[]>) {
+
+export function addMapToSuggestionMap(suggestionMaps: Map<string, Map<string, string[]>[]>, langCode: string, matchMap: Map<string, string[]>) {
     langCode = langCode.toLowerCase();
     if (!suggestionMaps.has(langCode)) {
         suggestionMaps.set(langCode, []);
