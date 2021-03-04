@@ -36,7 +36,7 @@ class XliffMerger {
     public defaultSettings(): MergeSettings {
         return {
             sortOnly: false,
-            useMatchingSetting: false,
+            matchWithSelf: false,
             matchBaseAppTranslation: false,
             replaceSelfClosingXlfTags: false,
             useExternalTranslationTool: false
@@ -80,7 +80,7 @@ class XliffMerger {
             }
         }
         this.mergeResult.numberOfRemovedTransUnits += this.targetXlf.transunit.length;
-        if (this.settings.useMatchingSetting) {
+        if (this.settings.matchWithSelf) {
             // Match it's own translations
             addMapToSuggestionMap(this.suggestionsMaps, this.targetXlf.targetLanguage, langMatchMap);
         }
@@ -90,8 +90,8 @@ class XliffMerger {
             this.mergeResult.numberOfRemovedNotes++;
         });
         return this.mergeResult;
-
     }
+
     private addTarget(langTransUnit: TransUnit, gTransUnit: TransUnit) {
         if (langTransUnit.hasTargets()) { return; }
         langTransUnit.targets.push(this.getNewTarget(gTransUnit));
@@ -130,9 +130,7 @@ class XliffMerger {
     }
 
     private getNewTarget(gTransUnit: TransUnit) {
-        if (gTransUnit.source === '') {
-            return new Target('');
-        }
+        if (gTransUnit.source === '') { return new Target(''); }
         let newTargetText = this.langIsSameAsGXlf ? gTransUnit.source : '';
         let newTarget = this.settings.useExternalTranslationTool ? new Target(newTargetText, this.langIsSameAsGXlf ? TargetState.NeedsAdaptation : TargetState.NeedsTranslation) : new Target((this.langIsSameAsGXlf ? TranslationToken.Review : TranslationToken.NotTranslated) + newTargetText);
         return newTarget;
@@ -153,7 +151,7 @@ interface MergeResult {
 
 interface MergeSettings {
     sortOnly: boolean,
-    useMatchingSetting: boolean,
+    matchWithSelf: boolean,
     matchBaseAppTranslation: boolean,
     replaceSelfClosingXlfTags: boolean,
     useExternalTranslationTool: boolean
